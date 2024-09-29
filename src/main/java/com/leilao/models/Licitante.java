@@ -10,9 +10,13 @@ public class Licitante implements Observer {
         this.nome = nome;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
     @Override
     public void update(double novaOferta) {
         this.ofertaAtual = novaOferta;
-        System.out.println("Licitante " + nome + " foi notificado da nova oferta: R$ " + ofertaAtual);
+        System.out.println("Licitante " + nome + " foi notificado do novo lance: R$ " + ofertaAtual);
     }
 }
