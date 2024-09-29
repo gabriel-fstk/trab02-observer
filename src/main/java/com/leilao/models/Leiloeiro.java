@@ -6,15 +6,11 @@ import java.util.List;
 
 public class Leiloeiro implements Subject {
     private List<Licitante> licitantes;
-    private float ofertaAtual;
+    private double ofertaAtual;
+    private Licitante licitanteAtual;
 
     public Leiloeiro() {
         this.licitantes = new ArrayList<>();
-    }
-
-    public void novaOferta(float oferta) {
-        this.ofertaAtual = oferta;
-        notifyObservers();
     }
 
     @Override
@@ -31,6 +27,25 @@ public class Leiloeiro implements Subject {
     public void notifyObservers() {
         for (Licitante licitante : licitantes) {
             licitante.update(ofertaAtual);
+        }
+    }
+
+    public void receberLance(Licitante licitante, double valor) {
+        if (valor > this.ofertaAtual) {
+            this.ofertaAtual = valor;
+            this.licitanteAtual = licitante; // Armazena o licitante atual
+            System.out.println("Novo lance de " + licitante.getNome() + ": " + valor);
+            notifyObservers();
+        } else {
+            System.out.println("Lance menor ou igual ao atual. Desconsiderado.");
+        }
+    }
+
+    public void anunciarVencedor() {
+        if (licitanteAtual != null) {
+            System.out.println("Vencedor: " + licitanteAtual.getNome() + " com o lance de " + ofertaAtual);
+        } else {
+            System.out.println("Nenhum vencedor.");
         }
     }
 }
