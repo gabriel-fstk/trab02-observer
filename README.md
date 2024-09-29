@@ -1,133 +1,105 @@
 
-# TRAB02-OBSERVER: Sistema de Leilão Usando o Padrão Observer
+# Projeto de Leilão com Padrão Observer
 
-Este projeto implementa um sistema de leilão simples utilizando o **Padrão Observer** em Java. No contexto do leilão, temos um leiloeiro (o **Sujeito**) e diversos licitantes (os **Observadores**). Os licitantes podem realizar lances, e o leiloeiro notifica a todos sobre a atualização do lance mais alto.
+Este projeto implementa um sistema de leilão em Java utilizando o padrão de design **Observer**. O sistema é composto por classes que representam o leiloeiro e os licitantes. Cada licitante é um observador que é notificado a cada novo lance, e o leiloeiro é o sujeito que gerencia os lances e notifica os licitantes.
 
-## Estrutura do Projeto
+## Estrutura de Diretórios
 
-A estrutura do projeto está organizada da seguinte maneira:
-
-```
-src/
- └── main/
-     └── java/
-         └── com/
-             └── leilao/
-                 ├── app/
-                 │   └── Main.java       # Ponto de entrada da aplicação
-                 ├── interfaces/
-                 │   ├── Observer.java   # Interface para os Observadores (Licitantes)
-                 │   └── Subject.java    # Interface para o Sujeito (Leiloeiro)
-                 └── models/
-                     ├── Leiloeiro.java  # Classe do Leiloeiro que gerencia os lances
-                     └── Licitante.java  # Classe dos Licitantes que realizam e observam os lances
+```plaintext
+src
+└── main
+    └── java
+        └── com
+            └── leilao
+                ├── app
+                │   └── Main.java
+                ├── interfaces
+                │   ├── Observer.java
+                │   └── Subject.java
+                └── models
+                    ├── Leiloeiro.java
+                    └── Licitante.java
 ```
 
-### Classes e Interfaces
+## Funcionalidades
 
-- **Main.java**: Classe principal que inicia o leilão, criando licitantes e leiloeiros.
-- **Observer.java**: Interface que define o contrato para os observadores (licitantes). Contém o método `update()`, chamado quando o estado do sujeito muda.
-- **Subject.java**: Interface que define o contrato para o sujeito (leiloeiro). Contém os métodos:
-  - `addObserver(Observer o)`: Adiciona um observador.
-  - `removeObserver(Observer o)`: Remove um observador.
-  - `notifyObservers()`: Notifica todos os observadores sobre uma mudança.
-- **Leiloeiro.java**: Implementa o leiloeiro, que mantém uma lista de observadores (licitantes) e notifica-os quando um novo lance é feito.
-- **Licitante.java**: Implementa um licitante que observa o leiloeiro e faz lances.
+- **Licitantes**: Podem fazer lances durante o leilão.
+- **Leiloeiro**: Recebe os lances e notifica os licitantes sobre novos valores.
+- **Notificação**: Cada licitante é notificado quando um novo lance maior é realizado.
+- **Vencedor**: O leiloeiro pode anunciar o vencedor ao final do leilão, informando o nome do licitante e o valor do maior lance.
 
-## Padrão Observer
+## Como o Sistema Funciona
 
-O **Padrão Observer** permite que objetos (observadores) sejam notificados sobre mudanças em outro objeto (sujeito). Neste caso:
+1. O **Leiloeiro** recebe os lances dos **Licitantes**.
+2. Cada vez que um novo lance é feito, se for maior que o atual, todos os licitantes são notificados.
+3. O **Leiloeiro** rastreia o licitante que fez o maior lance e pode anunciar o vencedor ao final do leilão.
 
-- **Leiloeiro** é o **Subject** (sujeito).
-- **Licitante** é o **Observer** (observador).
+## Exemplo de Código
 
-Cada vez que um licitante faz um lance, o leiloeiro notifica todos os outros licitantes com o valor atualizado do lance.
+Aqui está um exemplo de uso das classes do projeto:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Leiloeiro leiloeiro = new Leiloeiro();
+        Licitante licitante1 = new Licitante("Alice");
+        Licitante licitante2 = new Licitante("Bob");
+
+        leiloeiro.addObserver(licitante1);
+        leiloeiro.addObserver(licitante2);
+
+        leiloeiro.receberLance(licitante1, 100.0);
+        leiloeiro.receberLance(licitante2, 150.0);
+        leiloeiro.receberLance(licitante1, 200.0);
+
+        leiloeiro.anunciarVencedor(); // Anuncia Alice como vencedora com um lance de 200.0
+    }
+}
+```
+
+## Métodos Importantes
+
+### `Leiloeiro.java`
+
+- `addObserver(Observer observer)`: Adiciona um licitante para ser notificado sobre os lances.
+- `removeObserver(Observer observer)`: Remove um licitante da lista de notificação.
+- `notifyObservers()`: Notifica todos os licitantes sobre o novo lance.
+- `receberLance(Licitante licitante, double valor)`: Recebe o lance de um licitante e notifica os demais se for maior que o lance anterior.
+- `anunciarVencedor()`: Anuncia o licitante com o maior lance.
+
+### `Licitante.java`
+
+- `update(double valor)`: Método chamado quando um novo lance é feito, que notifica o licitante sobre o valor atual.
 
 ## Como Rodar o Projeto
 
 ### Pré-requisitos
 
-- Java JDK 8 ou superior instalado.
-- Um editor de código como VSCode ou IntelliJ IDEA.
+- **Java 8** ou superior instalado.
 
-### Executando o Projeto
+### Passos para rodar
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/SEU_USUARIO/trab02-observer.git
+   git clone https://github.com/seu-usuario/seu-repositorio.git
    ```
-
 2. Navegue até o diretório do projeto:
    ```bash
-   cd trab02-observer
+   cd seu-repositorio
+   ```
+3. Compile o projeto:
+   ```bash
+   javac -d bin src/main/java/com/leilao/**/*.java
+   ```
+4. Rode o projeto:
+   ```bash
+   java -cp bin com.leilao.app.Main
    ```
 
-3. Compile e execute o programa:
+## Contribuição
 
-   - Se estiver usando **VSCode**:
-     - Abra o projeto e use a extensão **Java Extension Pack** para compilar e rodar.
-   
-   - Via terminal:
-     ```bash
-     javac -d bin src/main/java/com/leilao/app/Main.java
-     java -cp bin com.leilao.app.Main
-     ```
-
-4. O programa iniciará o leilão e exibirá as atualizações dos lances conforme os licitantes fizerem suas ofertas.
-
-## Exemplo de Uso
-
-### Main.java
-
-Aqui está um exemplo simplificado de como o sistema funciona na classe `Main`:
-
-```java
-package com.leilao.app;
-
-import com.leilao.models.Leiloeiro;
-import com.leilao.models.Licitante;
-
-public class Main {
-    public static void main(String[] args) {
-        Leiloeiro leiloeiro = new Leiloeiro();
-
-        Licitante licitante1 = new Licitante("Licitante 1");
-        Licitante licitante2 = new Licitante("Licitante 2");
-
-        leiloeiro.addObserver(licitante1);
-        leiloeiro.addObserver(licitante2);
-
-        leiloeiro.novoLance(500);  // Notifica os licitantes
-        leiloeiro.novoLance(600);  // Notifica os licitantes
-    }
-}
-```
-
-### Resultado Esperado
-
-```bash
-Licitante 1 foi notificado. Novo lance: 500.0
-Licitante 2 foi notificado. Novo lance: 500.0
-Licitante 1 foi notificado. Novo lance: 600.0
-Licitante 2 foi notificado. Novo lance: 600.0
-```
-
-## Métodos Implementados
-
-### Subject (Leiloeiro)
-
-- `void addObserver(Observer o)`: Adiciona um observador à lista.
-- `void removeObserver(Observer o)`: Remove um observador da lista.
-- `void notifyObservers()`: Notifica todos os observadores sobre uma mudança de estado.
-
-### Observer (Licitante)
-
-- `void update(double novoLance)`: Atualiza o estado do observador com o novo lance.
-
-## Contribuições
-
-Se você quiser contribuir com o projeto, sinta-se à vontade para abrir **issues** ou enviar **pull requests**. Todos os tipos de contribuição são bem-vindos!
+Sinta-se à vontade para fazer um fork deste projeto e enviar pull requests com melhorias ou correções. Sugestões e feedbacks são bem-vindos!
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT. Consulte o arquivo `LICENSE` para mais detalhes.
+Este projeto está licenciado sob a [MIT License](LICENSE).
