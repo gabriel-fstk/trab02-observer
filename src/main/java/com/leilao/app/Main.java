@@ -14,12 +14,10 @@ public class Main {
         leiloeiro.addObserver(licitante2);
         leiloeiro.addObserver(licitante3);
 
-        leiloeiro.novaOferta(1000);
-        leiloeiro.novaOferta(1500);
-        leiloeiro.novaOferta(2000);
+        leiloeiro.receberLance(licitante1, 1000);
+        leiloeiro.receberLance(licitante2, 1500);
+        leiloeiro.receberLance(licitante3, 2000);
         
-        leiloeiro.removeObserver(licitante2);
-        
-        leiloeiro.novaOferta(2500);
+        leiloeiro.anunciarVencedor();
     }
 }
